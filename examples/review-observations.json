@@ -1,0 +1,58 @@
+{
+  "steps": [
+    "下门开/1",
+    "volume",
+    100.0,
+    "下门开/1",
+    "volume",
+    100.0
+  ],
+  "hydraulic": [
+    "下门开/1",
+    "state",
+    "attributed",
+    "下门开/2",
+    "state",
+    "blind"
+  ],
+  "partition": [
+    "下门开",
+    "accounted",
+    450.0,
+    "下门开",
+    "state",
+    "partial"
+  ],
+  "envelope": [
+    "上门时窗",
+    "state",
+    "over",
+    "上门时窗",
+    "state",
+    "blind"
+  ],
+  "gaps": [
+    "chamber/闸尺-20",
+    null,
+    null,
+    "chamber/闸尺-20",
+    "count",
+    1
+  ],
+  "gate_map": [
+    "上门开",
+    "cycle",
+    "下门开",
+    "续次下门关",
+    "state",
+    "sequence"
+  ],
+  "usage": [
+    "上尺-25",
+    "state",
+    "shared",
+    "上尺-25",
+    null,
+    null
+  ]
+}

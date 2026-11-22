@@ -1,0 +1,293 @@
+{
+  "namespace": "levelreplay",
+  "title": "船闸水位回放台",
+  "port": 8863,
+  "theme": "lock",
+  "plot": "闸室与上下游水位剖面",
+  "operations": [
+    {
+      "id": "level",
+      "label": "水尺归一",
+      "columns": [
+        "id",
+        "station",
+        "time",
+        "level",
+        "state"
+      ]
+    },
+    {
+      "id": "gate",
+      "label": "门位记录",
+      "columns": [
+        "id",
+        "time",
+        "station",
+        "state"
+      ]
+    },
+    {
+      "id": "edge",
+      "label": "边界读数",
+      "columns": [
+        "id",
+        "time",
+        "chamber",
+        "outside",
+        "evidence",
+        "state"
+      ]
+    },
+    {
+      "id": "head",
+      "label": "开门高差",
+      "columns": [
+        "id",
+        "time",
+        "head",
+        "state"
+      ]
+    },
+    {
+      "id": "volume",
+      "label": "循环水量",
+      "columns": [
+        "id",
+        "start",
+        "end",
+        "volume",
+        "state"
+      ]
+    },
+    {
+      "id": "supply",
+      "label": "补水核账",
+      "columns": [
+        "id",
+        "station",
+        "cycle",
+        "volume",
+        "state"
+      ]
+    },
+    {
+      "id": "revisit",
+      "label": "复盘异常",
+      "columns": [
+        "id",
+        "time",
+        "state",
+        "evidence"
+      ]
+    },
+    {
+      "id": "balance",
+      "label": "循环核差",
+      "columns": [
+        "id",
+        "start",
+        "end",
+        "volume",
+        "accounted",
+        "residual",
+        "state",
+        "evidence"
+      ]
+    },
+    {
+      "id": "steps",
+      "label": "闸室分段水量",
+      "columns": [
+        "id",
+        "cycle",
+        "start",
+        "end",
+        "source",
+        "volume",
+        "state"
+      ],
+      "optional": true
+    },
+    {
+      "id": "hydraulic",
+      "label": "逐段水头判读",
+      "columns": [
+        "id",
+        "cycle",
+        "start",
+        "end",
+        "lo",
+        "hi",
+        "volume",
+        "state"
+      ],
+      "optional": true
+    },
+    {
+      "id": "partition",
+      "label": "分段水量核差",
+      "columns": [
+        "id",
+        "volume",
+        "accounted",
+        "residual",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "envelope",
+      "label": "门位时钟复核",
+      "columns": [
+        "id",
+        "gate",
+        "start",
+        "end",
+        "lo",
+        "hi",
+        "state"
+      ],
+      "optional": true
+    },
+    {
+      "id": "gaps",
+      "label": "测站采样缺口",
+      "columns": [
+        "id",
+        "station",
+        "start",
+        "end",
+        "count",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "gate_map",
+      "label": "门位归属",
+      "columns": [
+        "id",
+        "cycle",
+        "station",
+        "time",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "usage",
+      "label": "测点使用谱系",
+      "columns": [
+        "id",
+        "count",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    }
+  ],
+  "values": {
+    "blind": "缺少可用数据",
+    "outside": "超出范围",
+    "known": "可计算",
+    "verified": "已核实",
+    "over": "高于限值",
+    "attributed": "可归因",
+    "opposed": "方向不符",
+    "sequence": "序列未闭合",
+    "observed": "已观测",
+    "upper": "上游",
+    "lower": "下游",
+    "chamber": "闸室",
+    "added": "新增",
+    "removed": "已移除",
+    "changed": "已变化",
+    "lower-open": "下门打开",
+    "lower-close": "下门关闭",
+    "upper-open": "上门打开",
+    "upper-close": "上门关闭",
+    "partial": "仅部分可核",
+    "unattributed": "无归因记录",
+    "balanced": "账面相符",
+    "residual": "有差额",
+    "fits": "有产量",
+    "split": "跨带分摊",
+    "kept": "保留",
+    "scrap": "边料",
+    "single": "单通道",
+    "ensemble": "合奏",
+    "silent": "无开管",
+    "supported": "有支撑",
+    "unconfirmed": "未确认",
+    "stable": "稳定",
+    "drift": "偏移不一致",
+    "review": "交接复核",
+    "revisit": "需要复测",
+    "shared": "多处复用",
+    "same": "口径一致",
+    "refined": "区间收窄",
+    "recovered": "恢复量化",
+    "carried": "传播缺测",
+    "local": "局部缺测",
+    "sparse": "邻点稀疏",
+    "unbalanced": "双端峰数不对称",
+    "cycle": "完整循环",
+    "marked": "有标记"
+  },
+  "columns": {
+    "accounted": "已归因水量",
+    "chamber": "闸室读数",
+    "cycle": "所属循环",
+    "end": "终点",
+    "evidence": "来源证据",
+    "head": "高差",
+    "id": "标识",
+    "level": "高程",
+    "outside": "闸外读数",
+    "residual": "水量差",
+    "stage": "归约阶段",
+    "start": "起点",
+    "state": "状态",
+    "station": "测站／来源",
+    "time": "时刻",
+    "volume": "净水量",
+    "before": "早版",
+    "after": "晚版",
+    "origin": "母卷纵向区间",
+    "sample": "取样编号",
+    "observed": "已观测",
+    "modeled": "模型池量",
+    "assigned": "已归属",
+    "pending": "待核对",
+    "relative": "相对音分差",
+    "rate_lo": "通量下界",
+    "rate_hi": "通量上界",
+    "area": "面积",
+    "total": "理论总量",
+    "kept": "保留宽度",
+    "lost": "边料宽度",
+    "used": "占用长度",
+    "remainder": "余量",
+    "candidates": "候选数",
+    "spread": "最大音分差",
+    "exclusive": "单候选数",
+    "h0": "起水位",
+    "h1": "止水位",
+    "source": "供水记录",
+    "gate": "门位",
+    "prior_lo": "原下界",
+    "prior_hi": "原上界",
+    "known": "已知数",
+    "left_count": "甲端峰数",
+    "right_count": "乙端峰数",
+    "mixed": "双因禁保长度",
+    "eligible": "可保长度",
+    "blocked": "重大疵点长度",
+    "blind": "缺检长度"
+  },
+  "reconciliation": "balance",
+  "defaultOperation": "edge"
+}

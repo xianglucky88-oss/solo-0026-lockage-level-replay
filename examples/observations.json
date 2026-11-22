@@ -1,0 +1,66 @@
+{
+  "level": [
+    "下尺-10",
+    "level",
+    10.02,
+    "闸尺-30",
+    null,
+    null
+  ],
+  "gate": [
+    "续次下门关",
+    "state",
+    "lower-close",
+    "上门开",
+    "time",
+    30
+  ],
+  "edge": [
+    "上门开",
+    "state",
+    "known",
+    "上门开",
+    "state",
+    "blind"
+  ],
+  "head": [
+    "上门开",
+    "state",
+    "over",
+    "上门开",
+    "state",
+    "blind"
+  ],
+  "volume": [
+    "下门开",
+    "volume",
+    450,
+    "下门开",
+    "state",
+    "blind"
+  ],
+  "supply": [
+    "引水甲",
+    "volume",
+    450,
+    "引水甲",
+    "state",
+    "blind"
+  ],
+  "revisit": [
+    "gate/续次下门关",
+    "state",
+    "sequence",
+    "head/上门开",
+    "state",
+    "blind"
+  ],
+  "balance": [
+    "下门开",
+    "state",
+    "balanced",
+    "下门开",
+    "state",
+    "blind"
+  ]
+}

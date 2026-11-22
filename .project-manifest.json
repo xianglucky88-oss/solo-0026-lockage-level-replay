@@ -1,0 +1,515 @@
+{
+  "project_name": "solo-0026-lockage-level-replay",
+  "project_shape": "fullstack",
+  "modules": [
+    {
+      "id": "contract",
+      "path": "levelreplay/contract.py",
+      "responsibility": "JSON 与领域字段边界"
+    },
+    {
+      "id": "domain",
+      "path": "levelreplay/domain.py",
+      "responsibility": "解析领域单位与归约事实"
+    },
+    {
+      "id": "rules",
+      "path": "levelreplay/rules.py",
+      "responsibility": "消费归约证据和约束，产生业务判定"
+    },
+    {
+      "id": "artifacts",
+      "path": "levelreplay/artifacts.py",
+      "responsibility": "成果规范编码、摘要与差分"
+    },
+    {
+      "id": "archive",
+      "path": "levelreplay/archive.py",
+      "responsibility": "SQLite 历史版本与原子封存"
+    },
+    {
+      "id": "service",
+      "path": "levelreplay/service.py",
+      "responsibility": "串联归约、比对和历史读取"
+    },
+    {
+      "id": "server",
+      "path": "levelreplay/server.py",
+      "responsibility": "本机 HTTP 及静态界面入口"
+    },
+    {
+      "id": "workbench",
+      "path": "web/ui.js",
+      "responsibility": "页面状态、样例归约、视图切换与图形编排"
+    },
+    {
+      "id": "reconcile",
+      "path": "levelreplay/reconcile.py",
+      "responsibility": "联合原始归约事实与业务判定，推导循环核差"
+    },
+    {
+      "id": "segments",
+      "path": "levelreplay/segments.py",
+      "responsibility": "复核证据归约"
+    },
+    {
+      "id": "review",
+      "path": "levelreplay/review.py",
+      "responsibility": "编排按领域事实驱动的可选复核"
+    },
+    {
+      "id": "quality",
+      "path": "levelreplay/quality.py",
+      "responsibility": "复核证据归约"
+    },
+    {
+      "id": "water_levels",
+      "path": "levelreplay/water_levels.py",
+      "responsibility": "测站标尺与有时距上限的水位插值"
+    },
+    {
+      "id": "gate_sequence",
+      "path": "levelreplay/gate_sequence.py",
+      "responsibility": "门位动作序列识别及残缺序列收集"
+    },
+    {
+      "id": "volume_curve",
+      "path": "levelreplay/volume_curve.py",
+      "responsibility": "分段截面积积分计算闸室体积"
+    },
+    {
+      "id": "result_table",
+      "path": "web/result-table.js",
+      "responsibility": "结果表及结构化证据明细"
+    },
+    {
+      "id": "version_panel",
+      "path": "web/version-panel.js",
+      "responsibility": "封存选择、版本读取、比对和下载"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "level",
+      "name": "水尺归一",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.level",
+      "steps": [
+        "高程绑定各测站零点",
+        "下尺-10 的 高程 为 10.02"
+      ],
+      "success": "下尺-10 的 高程 为 10.02",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow level",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "water_levels"
+      ]
+    },
+    {
+      "id": "gate",
+      "name": "门位重建",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.gate",
+      "steps": [
+        "错序门位不得生成可信过闸循环",
+        "续次下门关 的 状态 为 \"lower-close\""
+      ],
+      "success": "续次下门关 的 状态 为 \"lower-close\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow gate",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "gate_sequence"
+      ]
+    },
+    {
+      "id": "edge",
+      "name": "水位边界",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.edge",
+      "steps": [
+        "同站内可插值，跨采样空档不能补齐",
+        "上门开 的 状态 为 \"known\""
+      ],
+      "success": "上门开 的 状态 为 \"known\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow edge",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "water_levels"
+      ]
+    },
+    {
+      "id": "head",
+      "name": "开门高差",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.head",
+      "steps": [
+        "门动作与对应闸外水位共同决定证据",
+        "上门开 的 状态 为 \"over\""
+      ],
+      "success": "上门开 的 状态 为 \"over\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow head",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "water_levels"
+      ]
+    },
+    {
+      "id": "volume",
+      "name": "容积归约",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.volume",
+      "steps": [
+        "分段截面将水位差变成有符号水量",
+        "下门开 的 净水量 为 450"
+      ],
+      "success": "下门开 的 净水量 为 450",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow volume",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "gate_sequence",
+        "volume_curve"
+      ]
+    },
+    {
+      "id": "supply",
+      "name": "补水核账",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.supply",
+      "steps": [
+        "仅在有效循环和可信上下游证据下归因",
+        "引水甲 的 净水量 为 450"
+      ],
+      "success": "引水甲 的 净水量 为 450",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow supply",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "gate_sequence",
+        "volume_curve"
+      ]
+    },
+    {
+      "id": "revisit",
+      "name": "可复盘窗口",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.revisit",
+      "steps": [
+        "随缺测和开门高差列最小复测范围",
+        "gate/续次下门关 的 状态 为 \"sequence\""
+      ],
+      "success": "gate/续次下门关 的 状态 为 \"sequence\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow revisit",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "gate_sequence"
+      ]
+    },
+    {
+      "id": "balance",
+      "name": "循环核差",
+      "entry": "POST /levelreplay/api/evaluate 的 outputs.balance",
+      "steps": [
+        "归因水量只汇总本循环可信的补水记录；循环边界或补水证据不足时，不将观测缺失计为零差额。",
+        "下门开 的 状态 为 \"balanced\""
+      ],
+      "success": "下门开 的 状态 为 \"balanced\"",
+      "failure": "非法领域数据返回 400；不产生伪造结果",
+      "verification": "python3 -m levelreplay.check_flow balance",
+      "module_ids": [
+        "server",
+        "contract",
+        "service",
+        "domain",
+        "rules",
+        "reconcile",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "gate_sequence",
+        "volume_curve"
+      ]
+    },
+    {
+      "id": "compare",
+      "name": "循环差分",
+      "entry": "POST /levelreplay/api/compare",
+      "steps": [
+        "时标稳定但可证容积域可能变化",
+        "异版产生差异，同版无差异，跨对象拒绝"
+      ],
+      "success": "异版产生差异，同版无差异，跨对象拒绝",
+      "failure": "跨对象比对返回 409",
+      "verification": "python3 -m levelreplay.check_flow compare",
+      "module_ids": [
+        "server",
+        "service",
+        "archive",
+        "artifacts",
+        "version_panel",
+        "result_table"
+      ]
+    },
+    {
+      "id": "seal",
+      "name": "封存版本",
+      "entry": "POST /levelreplay/api/seal",
+      "steps": [
+        "水尺基准和几何版本共同固定",
+        "同输入仅写入一次，旧版不随对照改变"
+      ],
+      "success": "同输入仅写入一次，旧版不随对照改变",
+      "failure": "非法输入不写入",
+      "verification": "python3 -m levelreplay.check_flow seal",
+      "module_ids": [
+        "server",
+        "service",
+        "archive",
+        "artifacts",
+        "version_panel",
+        "result_table"
+      ]
+    },
+    {
+      "id": "export",
+      "name": "资料导出",
+      "entry": "GET /levelreplay/api/export/<摘要>",
+      "steps": [
+        "重放保持原事件顺序与来源",
+        "下载头有效且内容完整保留历史快照"
+      ],
+      "success": "下载头有效且内容完整保留历史快照",
+      "failure": "未知版本返回 404",
+      "verification": "python3 -m levelreplay.check_flow export",
+      "module_ids": [
+        "server",
+        "service",
+        "archive",
+        "artifacts",
+        "version_panel"
+      ]
+    },
+    {
+      "id": "steps",
+      "name": "闸室分段水量",
+      "entry": "POST /levelreplay/api/evaluate → outputs.steps",
+      "steps": [
+        "在闸室样点、供水窗口与外站样点处切分，避开不可内插缺口",
+        "把归约值、状态和来源明细写入 outputs.steps，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow steps",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "segments",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "gate_sequence"
+      ]
+    },
+    {
+      "id": "hydraulic",
+      "name": "逐段水头判读",
+      "entry": "POST /levelreplay/api/evaluate → outputs.hydraulic",
+      "steps": [
+        "用同区段两端的外站水头和体积符号筛查补水方向",
+        "把归约值、状态和来源明细写入 outputs.hydraulic，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow hydraulic",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "segments",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "gate_sequence",
+        "volume_curve"
+      ]
+    },
+    {
+      "id": "partition",
+      "name": "分段水量核差",
+      "entry": "POST /levelreplay/api/evaluate → outputs.partition",
+      "steps": [
+        "保留可归因的部分，证据未齐时不输出整循环差额",
+        "把归约值、状态和来源明细写入 outputs.partition，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow partition",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "segments",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "gate_sequence",
+        "volume_curve"
+      ]
+    },
+    {
+      "id": "envelope",
+      "name": "门位时钟复核",
+      "entry": "POST /levelreplay/api/evaluate → outputs.envelope",
+      "steps": [
+        "按双站曲线折点计算时钟不确定窗的绝对高差包络",
+        "把归约值、状态和来源明细写入 outputs.envelope，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow envelope",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "quality",
+        "artifacts",
+        "result_table",
+        "water_levels"
+      ]
+    },
+    {
+      "id": "gaps",
+      "name": "测站采样缺口",
+      "entry": "POST /levelreplay/api/evaluate → outputs.gaps",
+      "steps": [
+        "只列超过内插限制的相邻读数缺口及其中相关门位",
+        "把归约值、状态和来源明细写入 outputs.gaps，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow gaps",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "quality",
+        "artifacts",
+        "result_table",
+        "water_levels"
+      ]
+    },
+    {
+      "id": "gate_map",
+      "name": "门位归属",
+      "entry": "POST /levelreplay/api/evaluate → outputs.gate_map",
+      "steps": [
+        "将单个事件追到完整循环；拒绝串接残缺序列",
+        "把归约值、状态和来源明细写入 outputs.gate_map，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow gate_map",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "quality",
+        "artifacts",
+        "result_table",
+        "gate_sequence"
+      ]
+    },
+    {
+      "id": "usage",
+      "name": "测点使用谱系",
+      "entry": "POST /levelreplay/api/evaluate → outputs.usage",
+      "steps": [
+        "分别列出瞬时门位和时窗复核引用，源点不重复计数",
+        "把归约值、状态和来源明细写入 outputs.usage，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "复核输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow usage",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "rules",
+        "review",
+        "quality",
+        "artifacts",
+        "result_table",
+        "water_levels"
+      ]
+    }
+  ],
+  "complexity": {
+    "mechanisms": [
+      "error_propagation",
+      "capacity",
+      "policy_rules",
+      "lineage",
+      "export_freeze",
+      "versioning_audit",
+      "idempotency",
+      "batch_transaction",
+      "snapshot_consistency"
+    ]
+  }
+}

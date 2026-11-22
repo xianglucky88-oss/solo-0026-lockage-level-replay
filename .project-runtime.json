@@ -1,0 +1,86 @@
+{
+  "language": "Python 3.11+ / JavaScript ES modules",
+  "project_shape": "fullstack",
+  "source_extensions": [
+    ".py",
+    ".js",
+    ".css",
+    ".html"
+  ],
+  "build_command": "python3 -m compileall -q levelreplay && node --input-type=module --check < web/ui.js && node --input-type=module --check < web/chart.js && node --input-type=module --check < web/result-table.js && node --input-type=module --check < web/version-panel.js",
+  "testing": "deferred",
+  "workflow_checks": [
+    {
+      "workflow_id": "level",
+      "command": "python3 -m levelreplay.check_flow level"
+    },
+    {
+      "workflow_id": "gate",
+      "command": "python3 -m levelreplay.check_flow gate"
+    },
+    {
+      "workflow_id": "edge",
+      "command": "python3 -m levelreplay.check_flow edge"
+    },
+    {
+      "workflow_id": "head",
+      "command": "python3 -m levelreplay.check_flow head"
+    },
+    {
+      "workflow_id": "volume",
+      "command": "python3 -m levelreplay.check_flow volume"
+    },
+    {
+      "workflow_id": "supply",
+      "command": "python3 -m levelreplay.check_flow supply"
+    },
+    {
+      "workflow_id": "revisit",
+      "command": "python3 -m levelreplay.check_flow revisit"
+    },
+    {
+      "workflow_id": "balance",
+      "command": "python3 -m levelreplay.check_flow balance"
+    },
+    {
+      "workflow_id": "compare",
+      "command": "python3 -m levelreplay.check_flow compare"
+    },
+    {
+      "workflow_id": "seal",
+      "command": "python3 -m levelreplay.check_flow seal"
+    },
+    {
+      "workflow_id": "export",
+      "command": "python3 -m levelreplay.check_flow export"
+    },
+    {
+      "workflow_id": "steps",
+      "command": "python3 -m levelreplay.check_flow steps"
+    },
+    {
+      "workflow_id": "hydraulic",
+      "command": "python3 -m levelreplay.check_flow hydraulic"
+    },
+    {
+      "workflow_id": "partition",
+      "command": "python3 -m levelreplay.check_flow partition"
+    },
+    {
+      "workflow_id": "envelope",
+      "command": "python3 -m levelreplay.check_flow envelope"
+    },
+    {
+      "workflow_id": "gaps",
+      "command": "python3 -m levelreplay.check_flow gaps"
+    },
+    {
+      "workflow_id": "gate_map",
+      "command": "python3 -m levelreplay.check_flow gate_map"
+    },
+    {
+      "workflow_id": "usage",
+      "command": "python3 -m levelreplay.check_flow usage"
+    }
+  ]
+}
