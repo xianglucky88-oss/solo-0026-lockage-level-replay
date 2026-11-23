@@ -15,6 +15,14 @@ function viewValue(value, model) {
 }
 
 function traceTree(value, model) {
+  if (Array.isArray(value) && value.every((item) => item && typeof item === 'object' && !Array.isArray(item))) {
+    const list = el('ol');
+    for (const item of value) {
+      list.append(el('li'));
+      list.lastChild.append(traceTree(item, model));
+    }
+    return list;
+  }
   if (value && typeof value === 'object' && !Array.isArray(value)) {
     const list = el('dl');
     for (const [k, v] of Object.entries(value)) {

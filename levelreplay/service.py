@@ -1,4 +1,5 @@
 from . import artifacts, domain, reconcile, rules
+from .leakage import analyze_leakage
 from .review import analyze_review
 from .contract import ContractError, ident, obj
 
@@ -18,6 +19,8 @@ class Workbench:
         if 'review' in source:
             review = obj(source['review'], '复核数据')
             outputs.update(analyze_review(review, model, compiled, outputs))
+        if 'leakage' in source:
+            outputs['leakage'] = analyze_leakage(obj(source['leakage'], '失水诊断'), model)
         return artifacts.make_packet(self.config['namespace'], source, outputs)
 
     def execute(self, command, body):

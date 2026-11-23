@@ -81,6 +81,10 @@
     {
       "workflow_id": "usage",
       "command": "python3 -m levelreplay.check_flow usage"
+    },
+    {
+      "workflow_id": "leakage",
+      "command": "python3 -m levelreplay.check_flow leakage"
     }
   ]
 }

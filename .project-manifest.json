@@ -68,6 +68,11 @@
       "responsibility": "测站标尺与有时距上限的水位插值"
     },
     {
+      "id": "leakage",
+      "path": "levelreplay/leakage.py",
+      "responsibility": "闸室失水离线诊断：门位时序、停供时段与滚动水量窗"
+    },
+    {
       "id": "gate_sequence",
       "path": "levelreplay/gate_sequence.py",
       "responsibility": "门位动作序列识别及残缺序列收集"
@@ -496,6 +501,28 @@
         "artifacts",
         "result_table",
         "water_levels"
+      ]
+    },
+    {
+      "id": "leakage",
+      "name": "闸室失水诊断",
+      "entry": "POST /levelreplay/api/evaluate → outputs.leakage",
+      "steps": [
+        "只在双门确证关闭且停供、水尺连续有证的时间段内计算滚动水量损失",
+        "把超限终点区间、最严重损失和见证写入 outputs.leakage，随增强包封存并供历史回读"
+      ],
+      "success": "业务样例与对照的值和证据契合固定观测",
+      "failure": "诊断输入引用非法或超出边界时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow leakage",
+      "module_ids": [
+        "server",
+        "service",
+        "domain",
+        "leakage",
+        "artifacts",
+        "result_table",
+        "water_levels",
+        "volume_curve"
       ]
     }
   ],

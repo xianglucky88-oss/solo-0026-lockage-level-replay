@@ -54,5 +54,13 @@
     "上尺-25",
     null,
     null
+  ],
+  "leakage": [
+    "停供甲/2",
+    "state",
+    "observed",
+    "停供甲/2",
+    "state",
+    "blind"
   ]
 }

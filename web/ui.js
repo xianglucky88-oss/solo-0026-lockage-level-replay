@@ -37,7 +37,7 @@ function show(next) {
   $('subject').textContent = next.subject;
   $('digest').textContent = next.digest.slice(0, 12);
   draw($('visual'), next, model);
-  const review = Object.hasOwn(next.source, 'review');
+  const review = model.operations.some((op) => op.optional && Object.hasOwn(next.outputs, op.id));
   $('review-pane').hidden = !review;
   if (!review) $('review-pane').open = false;
   renderOperation(Object.hasOwn(next.outputs, mode) ? mode : model.defaultOperation);

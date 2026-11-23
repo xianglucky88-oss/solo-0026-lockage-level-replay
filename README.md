@@ -25,3 +25,7 @@ python3 -m levelreplay.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m levelreplay.check_flow steps` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+### 闸室失水离线诊断
+
+复核样例同时带有 `leakage` 诊断配置：两扇门各自有见证的初态、有确证的停供时段、滚动窗长与失水限值。诊断只在双门确证关闭且停供、闸室水尺连续有证的时间段内计算滚动水量损失，超限的窗终点区间记为异常，并附最严重有证损失与门位、停供、水尺见证；不改变原始水量归账。运行 `python3 -m levelreplay.check_flow leakage` 核对。

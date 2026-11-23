@@ -141,5 +141,28 @@
         "delta": 2
       }
     ]
+  },
+  "leakage": {
+    "initial": [
+      {
+        "gate": "lower",
+        "state": "closed",
+        "witness": "交班-下"
+      },
+      {
+        "gate": "upper",
+        "state": "closed",
+        "witness": "交班-上"
+      }
+    ],
+    "stops": [
+      {
+        "id": "停供甲",
+        "start": 5,
+        "end": 45
+      }
+    ],
+    "window": 8,
+    "limit": 30
   }
 }

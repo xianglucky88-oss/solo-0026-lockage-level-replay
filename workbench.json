@@ -187,6 +187,19 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "leakage",
+      "label": "闸室失水诊断",
+      "columns": [
+        "id",
+        "start",
+        "end",
+        "worst",
+        "state",
+        "evidence"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -235,7 +248,8 @@
     "sparse": "邻点稀疏",
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
-    "marked": "有标记"
+    "marked": "有标记",
+    "loss": "失水超限"
   },
   "columns": {
     "accounted": "已归因水量",
@@ -286,7 +300,14 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "worst": "最大滚动损失",
+    "window": "最重损失窗",
+    "spans": "超限终点区间",
+    "stop": "停供记录",
+    "gates": "门位见证",
+    "samples": "水尺见证",
+    "loss": "峰值损失"
   },
   "reconciliation": "balance",
   "defaultOperation": "edge"
