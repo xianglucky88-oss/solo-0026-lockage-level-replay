@@ -25,3 +25,11 @@ python3 -m levelreplay.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m levelreplay.check_flow steps` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+整闸次对时（扩展复核中的「整闸次对时」）用 `review.alignments` 给出门机允许秒差范围，核验两门共用同一秒差时的开门高差。三种边界情形各有一个可人工核算的夹具：
+
+```sh
+python3 -m levelreplay.check_alignment
+```
+
+它核对两门各自有符合窗口但无交集（无可行对时）、共同可行范围只剩一个边界点、以及缺测使共同可行性无法排除三种情况，并验证区间端点可追到水尺样点与门位记录、对时结果不覆写原门时标。

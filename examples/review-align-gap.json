@@ -1,0 +1,43 @@
+{
+  "id": "对时-缺测保留",
+  "datum": {
+    "chamber": 0,
+    "lower": 0,
+    "upper": 0
+  },
+  "max_gap": 10,
+  "head_limit": 0.1,
+  "samples": [
+    { "id": "闸尺-90", "station": "chamber", "time": 90, "level": 10.0 },
+    { "id": "闸尺-100", "station": "chamber", "time": 100, "level": 10.0 },
+    { "id": "闸尺-110", "station": "chamber", "time": 110, "level": 10.0 },
+    { "id": "闸尺-190", "station": "chamber", "time": 190, "level": 10.0 },
+    { "id": "闸尺-200", "station": "chamber", "time": 200, "level": 10.0 },
+    { "id": "闸尺-210", "station": "chamber", "time": 210, "level": 10.0 },
+    { "id": "下尺-95", "station": "lower", "time": 95, "level": 9.96 },
+    { "id": "下尺-100", "station": "lower", "time": 100, "level": 9.96 },
+    { "id": "下尺-105", "station": "lower", "time": 105, "level": 9.96 },
+    { "id": "上尺-195", "station": "upper", "time": 195, "level": 10.30 },
+    { "id": "上尺-206", "station": "upper", "time": 206, "level": 10.30 }
+  ],
+  "gates": [
+    { "id": "下门开", "event": "lower-open", "time": 100 },
+    { "id": "下门关", "event": "lower-close", "time": 110 },
+    { "id": "上门开", "event": "upper-open", "time": 200 },
+    { "id": "上门关", "event": "upper-close", "time": 210 }
+  ],
+  "sections": [
+    { "id": "恒截面", "level": 0, "area": 200 }
+  ],
+  "supplies": [],
+  "review": {
+    "alignments": [
+      {
+        "id": "缺测致可行性无法排除",
+        "cycle": "下门开",
+        "offset_low": -6,
+        "offset_high": 6
+      }
+    ]
+  }
+}

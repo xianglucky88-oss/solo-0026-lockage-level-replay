@@ -140,6 +140,14 @@
         "gate": "下门开",
         "delta": 2
       }
+    ],
+    "alignments": [
+      {
+        "id": "整闸对时",
+        "cycle": "下门开",
+        "offset_low": -4,
+        "offset_high": 4
+      }
     ]
   }
 }
