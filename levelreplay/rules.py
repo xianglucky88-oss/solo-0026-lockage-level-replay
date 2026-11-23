@@ -4,6 +4,9 @@ from .water_levels import read_level
 
 def decide(model, facts):
     compiled={k:facts[k] for k in ('level','gate','edge')}
+    for extra in ('gate_trace','lockage'):
+        if extra in facts:
+            compiled[extra]=facts[extra]
     edges={r['id']:r for r in facts['edge']}
     heads=[]
     for g in model['gates']:
@@ -20,6 +23,10 @@ def decide(model, facts):
         before,after=[volume(model['sections'],row['chamber']) for row in (first,last)]
         chambers.append(dict(id=group[0]['id'],start=first['time'],end=last['time'], volume=after-before if before is not None and after is not None else None,
                              state='known' if before is not None and after is not None else 'blind',evidence=first['evidence']+last['evidence']))
+    if model.get('contact_mode'):
+        direction_by_id={r['id']:r['state'] for r in facts.get('lockage',[]) if r['kind']=='cycle'}
+        for chamber in chambers:
+            chamber['direction']=direction_by_id.get(chamber['id'])
     supplies=[]
     for supply in model['supplies']:
         interval=next((r for r in chambers if r['start']<=supply['start']<supply['end']<=r['end']),None)

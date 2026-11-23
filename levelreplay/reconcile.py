@@ -14,5 +14,6 @@ def summarize(model, facts, outputs):
                  'unattributed' if not rows else 'balanced' if isclose(balance,0,abs_tol=1e-8) else 'residual')
         sessions.append(dict(id=chamber['id'], start=chamber['start'], end=chamber['end'],
                              volume=chamber['volume'], accounted=accounted, residual=balance,
-                             state=state, evidence=evidence))
+                             state=state, evidence=evidence,
+                             **({'direction': chamber['direction']} if 'direction' in chamber else {})))
     return sessions

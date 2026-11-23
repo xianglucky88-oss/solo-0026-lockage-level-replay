@@ -1,0 +1,30 @@
+{
+  "id": "三号闸错误包",
+  "datum": {
+    "chamber": 10,
+    "lower": 9.9,
+    "upper": 11
+  },
+  "max_gap": 12,
+  "head_limit": 0.08,
+  "gates": [
+    { "id": "下门开", "event": "lower-open", "time": 5 }
+  ],
+  "gate_logs": {
+    "hold": 2,
+    "max_interval": 12,
+    "contacts": [
+      { "id": "下-0", "station": "lower", "time": 0, "open_contact": false, "close_contact": true },
+      { "id": "上-0", "station": "upper", "time": 0, "open_contact": false, "close_contact": true }
+    ]
+  },
+  "samples": [
+    { "id": "闸尺-0", "station": "chamber", "time": 0, "level": 1.0 },
+    { "id": "下尺-0", "station": "lower", "time": 0, "level": 0.12 },
+    { "id": "上尺-0", "station": "upper", "time": 0, "level": 1.0 }
+  ],
+  "sections": [
+    { "id": "窄段", "level": 10, "area": 200 }
+  ],
+  "supplies": []
+}

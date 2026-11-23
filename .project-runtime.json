@@ -81,6 +81,10 @@
     {
       "workflow_id": "usage",
       "command": "python3 -m levelreplay.check_flow usage"
+    },
+    {
+      "workflow_id": "contacts",
+      "command": "python3 -m levelreplay.check_flow contacts"
     }
   ]
 }

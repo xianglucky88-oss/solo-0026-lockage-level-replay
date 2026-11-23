@@ -1,0 +1,62 @@
+{
+  "id": "三号闸异常班",
+  "datum": {
+    "chamber": 10,
+    "lower": 9.9,
+    "upper": 11
+  },
+  "max_gap": 12,
+  "head_limit": 0.08,
+  "gate_logs": {
+    "hold": 2,
+    "max_interval": 12,
+    "contacts": [
+      { "id": "下-0", "station": "lower", "time": 0, "open_contact": false, "close_contact": true },
+      { "id": "下-6", "station": "lower", "time": 6, "open_contact": false, "close_contact": true },
+      { "id": "下-8", "station": "lower", "time": 8, "open_contact": false, "close_contact": false },
+      { "id": "下-10", "station": "lower", "time": 10, "open_contact": true, "close_contact": false },
+      { "id": "下-13", "station": "lower", "time": 13, "open_contact": true, "close_contact": false },
+      { "id": "下-15", "station": "lower", "time": 15, "open_contact": false, "close_contact": false },
+      { "id": "下-17", "station": "lower", "time": 17, "open_contact": false, "close_contact": true },
+      { "id": "下-19", "station": "lower", "time": 19, "open_contact": false, "close_contact": true },
+      { "id": "下-30", "station": "lower", "time": 30, "open_contact": false, "close_contact": true },
+      { "id": "下-32", "station": "lower", "time": 32, "open_contact": false, "close_contact": true },
+      { "id": "下-34", "station": "lower", "time": 34, "open_contact": false, "close_contact": true },
+      { "id": "下-52", "station": "lower", "time": 52, "open_contact": true, "close_contact": true },
+      { "id": "下-55", "station": "lower", "time": 55, "open_contact": false, "close_contact": true },
+      { "id": "上-0", "station": "upper", "time": 0, "open_contact": false, "close_contact": true },
+      { "id": "上-6", "station": "upper", "time": 6, "open_contact": false, "close_contact": true },
+      { "id": "上-17", "station": "upper", "time": 17, "open_contact": true, "close_contact": false },
+      { "id": "上-20", "station": "upper", "time": 20, "open_contact": true, "close_contact": false },
+      { "id": "上-22", "station": "upper", "time": 22, "open_contact": false, "close_contact": false },
+      { "id": "上-24", "station": "upper", "time": 24, "open_contact": false, "close_contact": true },
+      { "id": "上-26", "station": "upper", "time": 26, "open_contact": false, "close_contact": true },
+      { "id": "上-35", "station": "upper", "time": 35, "open_contact": false, "close_contact": true },
+      { "id": "上-48", "station": "upper", "time": 48, "open_contact": false, "close_contact": false },
+      { "id": "上-50", "station": "upper", "time": 50, "open_contact": true, "close_contact": false },
+      { "id": "上-53", "station": "upper", "time": 53, "open_contact": true, "close_contact": false },
+      { "id": "上-55", "station": "upper", "time": 55, "open_contact": false, "close_contact": false },
+      { "id": "上-57", "station": "upper", "time": 57, "open_contact": false, "close_contact": true },
+      { "id": "上-60", "station": "upper", "time": 60, "open_contact": false, "close_contact": true }
+    ]
+  },
+  "samples": [
+    { "id": "闸尺-0", "station": "chamber", "time": 0, "level": 1.0 },
+    { "id": "闸尺-10", "station": "chamber", "time": 10, "level": 1.0 },
+    { "id": "闸尺-20", "station": "chamber", "time": 20, "level": 0.5 },
+    { "id": "闸尺-30", "station": "chamber", "time": 30, "level": 0.0 },
+    { "id": "闸尺-40", "station": "chamber", "time": 40, "level": 0.5 },
+    { "id": "闸尺-50", "station": "chamber", "time": 50, "level": 1.0 },
+    { "id": "下尺-0", "station": "lower", "time": 0, "level": 0.12 },
+    { "id": "下尺-20", "station": "lower", "time": 20, "level": 0.12 },
+    { "id": "下尺-40", "station": "lower", "time": 40, "level": 0.12 },
+    { "id": "上尺-0", "station": "upper", "time": 0, "level": 1.0 },
+    { "id": "上尺-20", "station": "upper", "time": 20, "level": 1.0 },
+    { "id": "上尺-40", "station": "upper", "time": 40, "level": 1.0 }
+  ],
+  "sections": [
+    { "id": "窄段", "level": 10, "area": 200 },
+    { "id": "扩段", "level": 11, "area": 250 }
+  ],
+  "supplies": []
+}

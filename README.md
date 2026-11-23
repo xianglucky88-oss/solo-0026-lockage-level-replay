@@ -17,10 +17,15 @@ python3 -m levelreplay.server
 ```sh
 python3 -m levelreplay.check_flow level
 python3 -m levelreplay.check_flow balance
+python3 -m levelreplay.check_flow contacts
 python3 -m levelreplay.check_flow export
 ```
 
 这些命令在临时成果库和临时回环端口运行实际 HTTP 接口，分别核对样例、对照和拒绝路径。`examples` 保存业务示例及可人工核算的观测点。完整命令见 `.project-runtime.json`；自动化测试套件留置，不包含私有验收测试、缺陷任务或参考解答。
+
+### 合成双门到位日志
+
+除直接提交整理好的 `gates` 门位事件外，界面「双门到位样例」与 `examples/contacts-sample.json` 演示可选的 `gate_logs`：每扇门在各自观测时刻带开到位、关到位两个接点，服务按记录的证实时长与间隔上限重建确认动作，在「原门位证据」列出确认动作、短暂假到位、断证缺口与接点冲突，并在「闸次判读」区分完整闸次（带上行/下行方向）、折返、异常与未决。循环对账只纳入完整闸次，按实际首关与后开边界计算带符号净容积；下行保留负容积，不把出水计成引水，折返与未决不进对账。`examples/contacts-anomaly.json` 覆盖同刻交接、全闭段断证与接点冲突，`examples/contacts-reject.json` 是应被 400 阻止的输入。只含 `gates` 的旧档口径不变、仍可回放与封存。
 
 ### 扩展复核
 

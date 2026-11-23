@@ -37,7 +37,7 @@ function show(next) {
   $('subject').textContent = next.subject;
   $('digest').textContent = next.digest.slice(0, 12);
   draw($('visual'), next, model);
-  const review = Object.hasOwn(next.source, 'review');
+  const review = Object.hasOwn(next.source, 'review') || Object.hasOwn(next.source, 'gate_logs');
   $('review-pane').hidden = !review;
   if (!review) $('review-pane').open = false;
   renderOperation(Object.hasOwn(next.outputs, mode) ? mode : model.defaultOperation);
@@ -94,6 +94,7 @@ guarded(async () => {
   bind('sample', () => choose('sample'));
   bind('review-sample', () => choose('review-sample'));
   bind('alternate', () => choose('alternate'));
+  bind('contacts-sample', () => choose('contacts-sample'));
   bind('evaluate', async () => {
     show(await request('evaluate', source()));
     note('已完成数据归约');

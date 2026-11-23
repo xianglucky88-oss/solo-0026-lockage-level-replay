@@ -27,6 +27,34 @@
       ]
     },
     {
+      "id": "gate_trace",
+      "label": "原门位证据",
+      "columns": [
+        "id",
+        "station",
+        "kind",
+        "state",
+        "start",
+        "end",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "lockage",
+      "label": "闸次判读",
+      "columns": [
+        "id",
+        "kind",
+        "state",
+        "station",
+        "start",
+        "end",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
       "id": "edge",
       "label": "边界读数",
       "columns": [
@@ -53,6 +81,7 @@
       "label": "循环水量",
       "columns": [
         "id",
+        "direction",
         "start",
         "end",
         "volume",
@@ -85,6 +114,7 @@
       "label": "循环核差",
       "columns": [
         "id",
+        "direction",
         "start",
         "end",
         "volume",
@@ -235,7 +265,19 @@
     "sparse": "邻点稀疏",
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
-    "marked": "有标记"
+    "marked": "有标记",
+    "upward": "上行闸次",
+    "downward": "下行闸次",
+    "turnback": "折返",
+    "broken": "全闭段断证",
+    "dual-open": "双开冲突",
+    "handoff": "同刻交接",
+    "unclosed": "未闭合",
+    "gap": "断证缺口",
+    "conflict": "接点冲突",
+    "action": "确认动作",
+    "blip": "短暂假到位",
+    "pending": "未决"
   },
   "columns": {
     "accounted": "已归因水量",
@@ -286,7 +328,9 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "direction": "闸次方向",
+    "kind": "判读类别"
   },
   "reconciliation": "balance",
   "defaultOperation": "edge"

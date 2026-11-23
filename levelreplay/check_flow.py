@@ -36,7 +36,72 @@ def observe(rows, row_id, field, target):
         raise ValueError(f'{row_id}.{field} 为 {actual!r}，应为 {target!r}')
 
 
+def audit_contacts(port):
+    sample = request(port, 'contacts-sample')[0]
+    anomaly = request(port, 'contacts-anomaly')[0]
+    reject = json.loads((ROOT/'examples'/'contacts-reject.json').read_text(encoding='utf8'))
+    request(port, 'evaluate', reject, status=400)
+    packet = request(port, 'evaluate', sample)[0]
+    outputs = packet['outputs']
+
+    def rows(stage):
+        return {row['id']: row for row in outputs[stage]}
+
+    trace = outputs['gate_trace']
+    blip = next(row for row in trace if row['id'] == '上-21.blip')
+    if blip['kind'] != 'blip' or blip['state'] != 'open':
+        raise ValueError('短暂假到位应只进原门位明细')
+    if any(row['id'] == '上-21' for row in outputs['gate']):
+        raise ValueError('短暂单点不能生成确认动作')
+    if not any(row['kind'] == 'gap' for row in trace):
+        raise ValueError('断证缺口应列在原门位明细')
+    lockage = rows('lockage')
+    if lockage['上-10']['state'] != 'downward' or lockage['上-10']['kind'] != 'cycle':
+        raise ValueError('首个闸次应为下行完整闸次')
+    if lockage['turnback/下-36']['kind'] != 'turnback':
+        raise ValueError('同侧再开应另记折返')
+    if lockage['下-36']['state'] != 'upward' or lockage['下-36']['kind'] != 'cycle':
+        raise ValueError('折返之后应完成反向上行闸次')
+    if len(outputs['volume']) != 2 or set(rows('volume')) != {'上-10', '下-36'}:
+        raise ValueError('折返不进入完整闸次对账')
+    volume = rows('volume')
+    if not volume['上-10']['volume'] < 0 or volume['上-10']['direction'] != 'downward':
+        raise ValueError('下行应保留负净容积，不把出水计成引水')
+    if not volume['下-36']['volume'] > 0 or volume['下-36']['direction'] != 'upward':
+        raise ValueError('上行净容积应为正')
+    balance = rows('balance')
+    if balance['下-36']['state'] != 'balanced' or balance['上-10']['state'] == 'balanced':
+        raise ValueError('循环核差应按方向分别成立')
+    supplies = rows('supply')
+    if supplies['下行误记引水']['state'] == 'attributed' or supplies['窗外记录']['state'] != 'outside':
+        raise ValueError('下行不能共用上行补水结论，窗外记录不进闸次')
+
+    odd = request(port, 'evaluate', anomaly)[0]['outputs']
+    states = {(row['state'], row['kind']) for row in odd['lockage']}
+    if ('handoff', 'anomaly') not in states or ('broken', 'pending') not in states:
+        raise ValueError('同刻交接应列异常、全闭段断证应列未决')
+    if any(row['kind'] == 'cycle' for row in odd['lockage']):
+        raise ValueError('断证闸次不能被后续开门补齐')
+    if odd['volume'] or odd['balance']:
+        raise ValueError('无完整闸次时不应产生循环对账')
+    if not any(row['kind'] == 'conflict' for row in odd['gate_trace']):
+        raise ValueError('双接点冲突应列原门位明细')
+
+    # 旧档逐字段口径不变，且封存与去重对双门日志同样有效。
+    classic = request(port, 'evaluate', request(port, 'sample')[0])[0]
+    if 'gate_trace' in classic['outputs'] or 'lockage' in classic['outputs']:
+        raise ValueError('旧档不应出现双门到位新增输出')
+    request(port, 'seal', reject, status=400)
+    sealed = request(port, 'seal', sample)[0]
+    if not sealed['created'] or request(port, 'seal', sample)[0]['created']:
+        raise ValueError('双门日志成果封存去重失败')
+    if request(port, f"packet/{sealed['digest']}")[0] != packet:
+        raise ValueError('双门日志封存快照与归约成果不一致')
+
+
 def audit(port, flow):
+    if flow == 'contacts':
+        return audit_contacts(port)
     review = any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
     prefix = 'review-' if review else ''
     data = request(port, prefix+'sample')[0]
@@ -94,7 +159,7 @@ def audit(port, flow):
 
 def main():
     parser = argparse.ArgumentParser(description='运行有界的生产工作流检查')
-    parser.add_argument('flow', choices=[op['id'] for op in CONFIG['operations']]+['seal','compare','export'])
+    parser.add_argument('flow', choices=[op['id'] for op in CONFIG['operations']]+['seal','compare','export','contacts'])
     args = parser.parse_args()
     with TemporaryDirectory(prefix=CONFIG['namespace']+'-') as directory:
         with serve(Path(directory)/'observations.sqlite', 0) as server:
