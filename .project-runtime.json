@@ -81,6 +81,22 @@
     {
       "workflow_id": "usage",
       "command": "python3 -m levelreplay.check_flow usage"
+    },
+    {
+      "workflow_id": "clearance",
+      "command": "python3 -m levelreplay.check_flow clearance"
+    },
+    {
+      "workflow_id": "clearance_gaps",
+      "command": "python3 -m levelreplay.check_flow clearance_gaps"
+    },
+    {
+      "workflow_id": "clearance_breaches",
+      "command": "python3 -m levelreplay.check_flow clearance_breaches"
+    },
+    {
+      "workflow_id": "clearance_verdict",
+      "command": "python3 -m levelreplay.check_flow clearance_verdict"
     }
   ]
 }

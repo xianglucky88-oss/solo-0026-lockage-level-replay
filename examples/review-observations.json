@@ -54,5 +54,39 @@
     "上尺-25",
     null,
     null
+  ],
+  "clearance": [
+    "clear/10/track",
+    "clearance",
+    -1.4,
+    "clear/10/track",
+    "clearance",
+    3.0
+  ],
+  "clearance_gaps": [
+    "gap/6",
+    "reasons",
+    [
+      "track-blind"
+    ],
+    "gap/1",
+    null,
+    null
+  ],
+  "clearance_breaches": [
+    "breach/1",
+    "min_clearance",
+    -1.4,
+    "breach/1",
+    null,
+    null
+  ],
+  "clearance_verdict": [
+    "clearance-verdict",
+    "state",
+    "under",
+    "clearance-verdict",
+    "state",
+    "verified"
   ]
 }

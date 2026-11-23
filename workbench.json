@@ -187,6 +187,64 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "clearance",
+      "label": "航迹净空核对",
+      "columns": [
+        "id",
+        "time",
+        "kind",
+        "water",
+        "bed",
+        "x",
+        "draft",
+        "clearance",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "clearance_gaps",
+      "label": "净空缺证区段",
+      "columns": [
+        "id",
+        "start",
+        "end",
+        "reasons",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "clearance_breaches",
+      "label": "净空不足时段",
+      "columns": [
+        "id",
+        "start",
+        "end",
+        "min_clearance",
+        "state",
+        "evidence"
+      ],
+      "optional": true
+    },
+    {
+      "id": "clearance_verdict",
+      "label": "航迹净空结论",
+      "columns": [
+        "id",
+        "state",
+        "min_clearance",
+        "min_time",
+        "limit",
+        "breaches",
+        "gaps",
+        "evidence"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -235,7 +293,18 @@
     "sparse": "邻点稀疏",
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
-    "marked": "有标记"
+    "marked": "有标记",
+    "under": "净空不足",
+    "gauge-blind": "水尺缺测或超间隔",
+    "track-blind": "航迹缺段",
+    "bed-blind": "跨未测床段",
+    "bed-outside": "越出床面剖面",
+    "draft-blind": "吃水档不明",
+    "track": "航迹样点",
+    "gauge": "水尺折点",
+    "draft": "吃水档生效",
+    "draft-before": "吃水跳变前侧",
+    "bed": "床面折点跨越"
   },
   "columns": {
     "accounted": "已归因水量",
@@ -286,7 +355,19 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "kind": "检查点性质",
+    "water": "水面高程",
+    "bed": "床面高程",
+    "x": "沿程坐标",
+    "draft": "吃水",
+    "clearance": "有证净空",
+    "reasons": "缺证原因",
+    "min_clearance": "最低有证净空",
+    "min_time": "最低净空时刻",
+    "limit": "要求最小净空",
+    "breaches": "不足时段数",
+    "gaps": "缺证区段数"
   },
   "reconciliation": "balance",
   "defaultOperation": "edge"

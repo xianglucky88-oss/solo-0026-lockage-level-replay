@@ -25,3 +25,5 @@ python3 -m levelreplay.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m levelreplay.check_flow steps` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+`review.clearance` 可启用航迹净空复核：在同一时刻按「水面高程 − 模型位置处床面高程 − 生效吃水」核对有证净空，在航迹样点、水尺折点、床面折点跨越处与吃水档生效处检查，分别输出逐点净空（`clearance`）、缺证区段（`clearance_gaps`）、低于限值的有证时段（`clearance_breaches`）和总体结论（`clearance_verdict`）。航迹缺段、跨未测床段、越出剖面、水尺或吃水缺证均单独标出，不把缺段当作停留；只有整条航迹有证且无不足才判满足。该复核不输出实际通航指令。

@@ -152,6 +152,107 @@
         "gate": "下门开",
         "delta": 2
       }
-    ]
+    ],
+    "clearance": {
+      "bed_gap": 30,
+      "track_gap": 6,
+      "clearance_limit": 0.5,
+      "bed": [
+        {
+          "id": "床-0",
+          "station": 0,
+          "elevation": 7.0
+        },
+        {
+          "id": "床脊-50",
+          "station": 50,
+          "elevation": 9.0
+        },
+        {
+          "id": "床-100",
+          "station": 100,
+          "elevation": 7.0
+        },
+        {
+          "id": "床-140",
+          "station": 140,
+          "elevation": 7.0
+        },
+        {
+          "id": "床-200",
+          "station": 200,
+          "elevation": 6.0
+        }
+      ],
+      "track": [
+        {
+          "id": "航-0",
+          "time": 0,
+          "station": -10
+        },
+        {
+          "id": "航-5",
+          "time": 5,
+          "station": 0
+        },
+        {
+          "id": "航-10",
+          "time": 10,
+          "station": 50
+        },
+        {
+          "id": "航-12",
+          "time": 12,
+          "station": 50
+        },
+        {
+          "id": "航-15",
+          "time": 15,
+          "station": 100
+        },
+        {
+          "id": "航-20",
+          "time": 20,
+          "station": 140
+        },
+        {
+          "id": "航-30",
+          "time": 30,
+          "station": 50
+        },
+        {
+          "id": "航-35",
+          "time": 35,
+          "station": 0
+        },
+        {
+          "id": "航-38",
+          "time": 38,
+          "station": 205
+        },
+        {
+          "id": "航-42",
+          "time": 42,
+          "station": 90
+        },
+        {
+          "id": "航-45",
+          "time": 45,
+          "station": 50
+        }
+      ],
+      "draft_regimes": [
+        {
+          "id": "吃水-压载",
+          "start": 2,
+          "draft": 2.0
+        },
+        {
+          "id": "吃水-满载",
+          "start": 10,
+          "draft": 2.4
+        }
+      ]
+    }
   }
 }

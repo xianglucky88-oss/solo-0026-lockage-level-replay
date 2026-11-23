@@ -147,6 +147,37 @@
         "gate": "下门关",
         "delta": 1
       }
-    ]
+    ],
+    "clearance": {
+      "bed_gap": 30,
+      "track_gap": 12,
+      "clearance_limit": 0.5,
+      "bed": [
+        {
+          "id": "床面孤点",
+          "station": 0,
+          "elevation": 5.0
+        }
+      ],
+      "track": [
+        {
+          "id": "航甲",
+          "time": 10,
+          "station": 0
+        },
+        {
+          "id": "航乙",
+          "time": 20,
+          "station": 10
+        }
+      ],
+      "draft_regimes": [
+        {
+          "id": "吃水甲",
+          "start": 0,
+          "draft": 2.0
+        }
+      ]
+    }
   }
 }
