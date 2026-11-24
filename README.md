@@ -17,10 +17,15 @@ python3 -m levelreplay.server
 ```sh
 python3 -m levelreplay.check_flow level
 python3 -m levelreplay.check_flow balance
+python3 -m levelreplay.check_flow load
 python3 -m levelreplay.check_flow export
 ```
 
 这些命令在临时成果库和临时回环端口运行实际 HTTP 接口，分别核对样例、对照和拒绝路径。`examples` 保存业务示例及可人工核算的观测点。完整命令见 `.project-runtime.json`；自动化测试套件留置，不包含私有验收测试、缺陷任务或参考解答。
+
+### 载荷排开修正
+
+界面「载荷样例」载入 `examples/load-sample.json`：顶层可选 `loads` 描述标定载荷的初况档位与每次浸入深度变更的前后排水量。几何容积上升而净水量不涨、与供水起止同秒的变更不重复计、以及首尾有证但中间阶段无法签认（`load-alternate.json`，状态 `partial`）三类记录都进入原有循环水量、补水核账与循环核差，不另设修正表。无 `loads` 附件的历史输入逐字段沿用旧口径；附件缺初况见 `examples/load-reject.json`，返回 400 不落库。运行 `python3 -m levelreplay.check_flow load` 可核对有效、缺证与拒绝路径。
 
 ### 扩展复核
 

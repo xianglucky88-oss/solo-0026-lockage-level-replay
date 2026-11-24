@@ -43,6 +43,10 @@
       "command": "python3 -m levelreplay.check_flow balance"
     },
     {
+      "workflow_id": "load",
+      "command": "python3 -m levelreplay.check_flow load"
+    },
+    {
       "workflow_id": "compare",
       "command": "python3 -m levelreplay.check_flow compare"
     },

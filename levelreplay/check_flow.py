@@ -36,7 +36,33 @@ def observe(rows, row_id, field, target):
         raise ValueError(f'{row_id}.{field} 为 {actual!r}，应为 {target!r}')
 
 
+def audit_load(port):
+    data = request(port, 'load-sample')[0]
+    alt = request(port, 'load-alternate')[0]
+    bad = json.loads((ROOT/'examples'/'load-reject.json').read_text(encoding='utf8'))
+    original = request(port, 'evaluate', data)[0]
+    alternate = request(port, 'evaluate', alt)[0]
+    request(port, 'evaluate', bad, status=400)
+    request(port, 'seal', bad, status=400)
+    cases = json.loads((ROOT/'examples'/'load-observations.json').read_text(encoding='utf8'))
+    for flow, (row, key, value, alt_row, alt_key, alt_value) in cases.items():
+        observe(original['outputs'][flow], row, key, value)
+        observe(alternate['outputs'][flow], alt_row, alt_key, alt_value)
+    sealed = request(port, 'seal', data)[0]
+    if request(port, f"packet/{sealed['digest']}")[0] != original:
+        raise ValueError('载荷修正未完整封存')
+    if 'loads' not in original['outputs'] or 'loads' not in alternate['outputs']:
+        raise ValueError('载荷附件应产出载荷档位时间线')
+    baseline = request(port, 'evaluate', request(port, 'sample')[0])[0]
+    if 'loads' in baseline['outputs'] or any(k in baseline['outputs']
+                                             for k in ('gross', 'instants')):
+        raise ValueError('无载荷附件的历史输入必须沿用旧口径')
+
+
 def audit(port, flow):
+    if flow == 'load':
+        audit_load(port)
+        return
     review = any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
     prefix = 'review-' if review else ''
     data = request(port, prefix+'sample')[0]
@@ -94,7 +120,7 @@ def audit(port, flow):
 
 def main():
     parser = argparse.ArgumentParser(description='运行有界的生产工作流检查')
-    parser.add_argument('flow', choices=[op['id'] for op in CONFIG['operations']]+['seal','compare','export'])
+    parser.add_argument('flow', choices=[op['id'] for op in CONFIG['operations']]+['seal','compare','export','load'])
     args = parser.parse_args()
     with TemporaryDirectory(prefix=CONFIG['namespace']+'-') as directory:
         with serve(Path(directory)/'observations.sqlite', 0) as server:

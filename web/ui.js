@@ -74,7 +74,10 @@ async function choose(path) {
     $('review-pane').open = true;
     renderOperation(model.operations.find((op) => op.optional).id);
   }
-  note(({ sample:'样例已处理', alternate:'对照样例已处理', 'review-sample':'复核样例已处理' })[path]);
+  if (path === 'load-sample' && Object.hasOwn(next.outputs, 'loads')) {
+    renderOperation('loads');
+  }
+  note(({ sample:'样例已处理', alternate:'对照样例已处理', 'review-sample':'复核样例已处理', 'load-sample':'载荷样例已处理' })[path]);
 }
 
 function bind(id, action, event = 'click') {
@@ -89,10 +92,11 @@ guarded(async () => {
     button.textContent = spec.label;
     button.dataset.mode = spec.id;
     button.addEventListener('click', () => packet && renderOperation(spec.id));
-    $(spec.optional ? 'review-stages' : 'stages').append(button);
+    $(spec.optional && spec.id !== 'loads' ? 'review-stages' : 'stages').append(button);
   }
   bind('sample', () => choose('sample'));
   bind('review-sample', () => choose('review-sample'));
+  bind('load-sample', () => choose('load-sample'));
   bind('alternate', () => choose('alternate'));
   bind('evaluate', async () => {
     show(await request('evaluate', source()));

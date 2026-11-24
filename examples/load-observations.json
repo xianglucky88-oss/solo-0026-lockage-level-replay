@@ -1,0 +1,34 @@
+{
+  "volume": [
+    "下门开",
+    "volume",
+    400.0,
+    "下门开",
+    "gross",
+    450.0
+  ],
+  "supply": [
+    "引水甲",
+    "state",
+    "attributed",
+    "引水甲",
+    "state",
+    "partial"
+  ],
+  "balance": [
+    "下门开",
+    "state",
+    "balanced",
+    "下门开",
+    "state",
+    "partial"
+  ],
+  "loads": [
+    "标定载荷甲/1/after",
+    "state",
+    "confirmed",
+    "标定载荷甲/1/after",
+    "state",
+    "unverified"
+  ]
+}

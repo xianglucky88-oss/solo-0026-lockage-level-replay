@@ -10,6 +10,12 @@
 
 `examples/sample.json` 是字段及合法取值示例。`alternate.json` 是同一对象的另一有效输入，`reject.json` 是应被阻止的输入。对象在输入顶层以 `id` 标识；归约行使用原始身份或来源组件组合作为标识。缺测映射为 `null` 或待定状态，不当成数值零。接口接受不超过 512 KiB 的 UTF-8 JSON 对象；重复字段、非法数值或域内冲突返回 400。
 
+### 载荷排开修正
+
+顶层可选 `loads`，省略时所有基础输出与旧版逐字段一致；附件缺初况、初况缺排水量或确证档缺见证编号均返回 400，不能按空闸（排开体积零）处理。每条载荷给出本档起点初况（`confirmed` 已知排水量加见证编号，或 `unverified` 未核实状态）以及此后每次变更的前后两档排水量、状态与见证编号；未核实档不得附见证。一段时间内沿用最后一次确证档位，遇到明确未核实的变更即停止沿用，直到新档重新确证。不同载荷的变更时刻不得重合，须逐秒拆开。
+
+净水量 = 几何容积 − 当前确证档位的载荷排开体积。闸边水尺读数与开门高差继续表示实测水面，不参与净水修正。循环水量行同时给出 `gross`（几何容积变化）与 `volume`（净水量变化）；连续供水阶段在载荷变更处拆开，各段从起点后态算到终点前态，与供水起止同秒的变更不拆段、其档位差作为瞬时净水账项单列在所属闸次中，既不混入连续供水量也不计两次。完整闸次按闭门起点的变更前档、开门终点的变更后档计算，瞬时账项只收起止之间的部分。循环、供水和核差明细的 `evidence` 同时列出所用的水尺样点与载荷见证编号。途中缺证而首尾均确证时，允许报告有判据的首尾净变化（状态 `partial`），但缺证段不靠总量补齐，也不得据此宣布对账闭合；`load-sample.json`、`load-alternate.json`、`load-reject.json` 给出有效、缺证与拒绝三类输入。
+
 成果保存数据合同版本、原始包、各阶段输出、输入摘要和整包摘要。SQLite 通过唯一摘要让同一个有效产物只存一次，错误输入不落库；版本比对只允许同一对象和同一合同版本。校验摘要用于本地内容完整性，不是签名。
 
 ## 生产工作流
@@ -24,6 +30,7 @@
 | 补水核账 | `POST /levelreplay/api/evaluate 的 outputs.supply` | 引水甲 的 净水量 为 450 |
 | 可复盘窗口 | `POST /levelreplay/api/evaluate 的 outputs.revisit` | gate/续次下门关 的 状态 为 "sequence" |
 | 循环核差 | `POST /levelreplay/api/evaluate 的 outputs.balance` | 下门开 的 状态 为 "balanced" |
+| 载荷净水量 | `POST /levelreplay/api/evaluate 的 outputs.loads` | 标定载荷甲/1/after 的 状态 为 "confirmed" |
 | 循环差分 | `POST /levelreplay/api/compare` | 异版产生差异，同版无差异，跨对象拒绝 |
 | 封存版本 | `POST /levelreplay/api/seal` | 同输入仅写入一次，旧版不随对照改变 |
 | 资料导出 | `GET /levelreplay/api/export/<摘要>` | 下载头有效且内容完整保留历史快照 |
@@ -33,6 +40,7 @@
 - `levelreplay/contract.py`：JSON 与领域字段边界。
 - `levelreplay/domain.py`：解析领域单位与归约事实。
 - `levelreplay/rules.py`：消费归约证据和约束，产生业务判定。
+- `levelreplay/loadings.py`：载荷档位时间线、排开体积口径与净水量归约。
 - `levelreplay/artifacts.py`：成果规范编码、摘要与差分。
 - `levelreplay/archive.py`：SQLite 历史版本与原子封存。
 - `levelreplay/service.py`：串联归约、比对和历史读取。

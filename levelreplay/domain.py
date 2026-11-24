@@ -1,5 +1,6 @@
 from .contract import enum, invariant, num, obj, records, unique_order
 from .gate_sequence import GATES, cycles
+from .loadings import parse_loads
 from .water_levels import STATIONS, read_level
 
 
@@ -25,7 +26,7 @@ def parse(source):
     phases.sort(key=lambda r:r['start'])
     invariant(all(r['start']<r['end'] for r in phases) and all(a['end']<=b['start'] for a,b in zip(phases,phases[1:])),
               '补水区段必须为不重叠正长度区间')
-    return dict(samples=samples,gates=gates,sections=sections,supplies=phases,
+    return dict(samples=samples,gates=gates,sections=sections,supplies=phases,loads=parse_loads(source),
                 max_gap=num(source.get('max_gap'),'可插值时长',0.001),limit=num(source.get('head_limit'),'开门高差限值',0,10))
 
 
