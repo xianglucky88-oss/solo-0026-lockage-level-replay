@@ -38,21 +38,24 @@ def observe(rows, row_id, field, target):
 
 def audit(port, flow):
     review = any(op['id'] == flow and op.get('optional') for op in CONFIG['operations'])
-    prefix = 'review-' if review else ''
+    roster = flow.startswith('roster_')
+    prefix = 'roster-' if roster else 'review-' if review else ''
     data = request(port, prefix+'sample')[0]
     alt = request(port, prefix+'alternate')[0]
     bad = json.loads((ROOT/'examples'/(prefix+'reject.json')).read_text(encoding='utf8'))
     original = request(port,'evaluate',data)[0]
     alternate = request(port,'evaluate',alt)[0]
     request(port,'evaluate',bad,status=400)
-    if review:
+    if review or roster:
         request(port, 'seal', bad, status=400)
-        baselines = [request(port, 'evaluate', request(port, name)[0])[0] for name in ('sample', 'alternate')]
+        baselines = [request(port, 'evaluate', request(port, name)[0])[0]
+                     for name in ('sample', 'alternate')]
         for baseline, enhanced in zip(baselines, (original, alternate), strict=True):
             if flow in baseline['outputs'] or any(enhanced['outputs'][k] != v for k,v in baseline['outputs'].items()):
-                raise ValueError('复核改变了基础口径')
+                raise ValueError('增强数据改变了基础口径')
     if flow in original['outputs']:
-        cases = json.loads((ROOT/'examples'/(prefix+'observations.json')).read_text(encoding='utf8'))
+        observations = prefix+'observations.json'
+        cases = json.loads((ROOT/'examples'/observations).read_text(encoding='utf8'))
         row, key, value, alt_row, alt_key, alt_value = cases[flow]
         observe(original['outputs'][flow],row,key,value)
         observe(alternate['outputs'][flow],alt_row,alt_key,alt_value)

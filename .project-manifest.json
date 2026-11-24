@@ -58,6 +58,11 @@
       "responsibility": "编排按领域事实驱动的可选复核"
     },
     {
+      "id": "roster",
+      "path": "levelreplay/roster.py",
+      "responsibility": "过闸名册半开窗口归属、最优解释取证与争用核对"
+    },
+    {
       "id": "quality",
       "path": "levelreplay/quality.py",
       "responsibility": "复核证据归约"
@@ -496,6 +501,90 @@
         "artifacts",
         "result_table",
         "water_levels"
+      ]
+    },
+    {
+      "id": "roster_verified",
+      "name": "已核实名册",
+      "entry": "POST /levelreplay/api/evaluate → outputs.roster_verified",
+      "steps": [
+        "仅把所有最优解释里都相同的配对及其闸次列入已核实名册",
+        "满额人数确定但成员不唯一时不随输入顺序任选名单"
+      ],
+      "success": "样例的唯一确认对进入已核实名册，争用名额不乱签",
+      "failure": "名册输入非法或确认闸次不存在时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow roster_verified",
+      "module_ids": [
+        "server",
+        "service",
+        "contract",
+        "roster",
+        "gate_sequence",
+        "artifacts",
+        "result_table"
+      ]
+    },
+    {
+      "id": "roster_contention",
+      "name": "名册争用",
+      "entry": "POST /levelreplay/api/evaluate → outputs.roster_contention",
+      "steps": [
+        "逐闸次求最优解释下成员数的精确上下界与争用记录",
+        "人数确定而成员不唯一时只报人数范围、争用记录和可行闸次"
+      ],
+      "success": "样例报满额但成员不唯一的 full-contention",
+      "failure": "名册输入非法时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow roster_contention",
+      "module_ids": [
+        "server",
+        "service",
+        "contract",
+        "roster",
+        "gate_sequence",
+        "artifacts",
+        "result_table"
+      ]
+    },
+    {
+      "id": "roster_conflict",
+      "name": "确认配对冲突",
+      "entry": "POST /levelreplay/api/evaluate → outputs.roster_conflict",
+      "steps": [
+        "船号不符、无共同窗口、记录复用、无法共存的确认配对逐条上报",
+        "冲突不静默解除确认，也不参与最优求解"
+      ],
+      "success": "对照样例显式指出 vessel-mismatch 冲突",
+      "failure": "名册输入非法时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow roster_conflict",
+      "module_ids": [
+        "server",
+        "service",
+        "contract",
+        "roster",
+        "gate_sequence",
+        "artifacts",
+        "result_table"
+      ]
+    },
+    {
+      "id": "roster_stray",
+      "name": "孤立观察",
+      "entry": "POST /levelreplay/api/evaluate → outputs.roster_stray",
+      "steps": [
+        "无完整门序窗口可落的观察单独保留，不并入已核实通行",
+        "可落窗但未稳定匹配的记录标为争用或未匹配"
+      ],
+      "success": "窗外记录以 window 原因单独保留",
+      "failure": "名册输入非法时返回 400；不封存",
+      "verification": "python3 -m levelreplay.check_flow roster_stray",
+      "module_ids": [
+        "server",
+        "service",
+        "contract",
+        "roster",
+        "gate_sequence",
+        "artifacts",
+        "result_table"
       ]
     }
   ],

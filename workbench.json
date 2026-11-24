@@ -187,6 +187,60 @@
         "evidence"
       ],
       "optional": true
+    },
+    {
+      "id": "roster_verified",
+      "label": "已核实名册",
+      "columns": [
+        "id",
+        "cycle",
+        "entry",
+        "exit",
+        "vessel",
+        "state"
+      ],
+      "optional": true
+    },
+    {
+      "id": "roster_contention",
+      "label": "名册争用",
+      "columns": [
+        "id",
+        "cycle",
+        "low",
+        "high",
+        "capacity",
+        "contenders",
+        "state"
+      ],
+      "optional": true
+    },
+    {
+      "id": "roster_conflict",
+      "label": "确认配对冲突",
+      "columns": [
+        "id",
+        "entry",
+        "exit",
+        "cycle",
+        "reason",
+        "state"
+      ],
+      "optional": true
+    },
+    {
+      "id": "roster_stray",
+      "label": "孤立观察",
+      "columns": [
+        "id",
+        "record",
+        "vessel",
+        "start",
+        "end",
+        "reason",
+        "state"
+      ],
+      "optional": true
     }
   ],
   "values": {
@@ -235,7 +289,24 @@
     "sparse": "邻点稀疏",
     "unbalanced": "双端峰数不对称",
     "cycle": "完整循环",
-    "marked": "有标记"
+    "marked": "有标记",
+    "roster": "过闸名册",
+    "contention": "成员争用",
+    "full-contention": "满额但成员不唯一",
+    "conflict": "确认冲突",
+    "stray": "孤立观察",
+    "missing-record": "引用记录不存在",
+    "vessel-mismatch": "双方船号不一致",
+    "no-window": "无共同半开窗口",
+    "bad-order": "入口出口顺序不符",
+    "cycle-mismatch": "双方确认闸次不一致",
+    "declared-window": "确认闸次不在可行窗口",
+    "record-reused": "记录被多个确认配对占用",
+    "vessel-duplicate": "同船同闸次重复登记",
+    "forced-infeasible": "确认配对无法与其他确认共存",
+    "window": "无完整门序窗口",
+    "unmatched": "可落窗但未稳定匹配",
+    "contended": "名额争用"
   },
   "columns": {
     "accounted": "已归因水量",
@@ -286,7 +357,16 @@
     "mixed": "双因禁保长度",
     "eligible": "可保长度",
     "blocked": "重大疵点长度",
-    "blind": "缺检长度"
+    "blind": "缺检长度",
+    "entry": "入口记录号",
+    "exit": "出口记录号",
+    "vessel": "船号",
+    "reason": "原因",
+    "record": "记录号",
+    "low": "人数下界",
+    "high": "人数上界",
+    "capacity": "每批容量",
+    "contenders": "争用记录"
   },
   "reconciliation": "balance",
   "defaultOperation": "edge"

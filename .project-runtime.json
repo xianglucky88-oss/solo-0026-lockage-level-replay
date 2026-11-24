@@ -81,6 +81,22 @@
     {
       "workflow_id": "usage",
       "command": "python3 -m levelreplay.check_flow usage"
+    },
+    {
+      "workflow_id": "roster_verified",
+      "command": "python3 -m levelreplay.check_flow roster_verified"
+    },
+    {
+      "workflow_id": "roster_contention",
+      "command": "python3 -m levelreplay.check_flow roster_contention"
+    },
+    {
+      "workflow_id": "roster_conflict",
+      "command": "python3 -m levelreplay.check_flow roster_conflict"
+    },
+    {
+      "workflow_id": "roster_stray",
+      "command": "python3 -m levelreplay.check_flow roster_stray"
     }
   ]
 }

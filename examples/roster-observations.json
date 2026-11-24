@@ -1,0 +1,34 @@
+{
+  "roster_verified": [
+    "下门开/入-甲/出-甲",
+    "state",
+    "verified",
+    "下门开/入-甲/出-甲",
+    "vessel",
+    "船甲"
+  ],
+  "roster_contention": [
+    "下门开",
+    "state",
+    "full-contention",
+    "下门开",
+    "high",
+    2
+  ],
+  "roster_conflict": [
+    null,
+    null,
+    null,
+    "冲突-船号",
+    "reason",
+    "vessel-mismatch"
+  ],
+  "roster_stray": [
+    "入-窗外",
+    "reason",
+    "window",
+    "入-丁",
+    "reason",
+    "unmatched"
+  ]
+}

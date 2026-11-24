@@ -1,4 +1,4 @@
-from . import artifacts, domain, reconcile, rules
+from . import artifacts, domain, reconcile, roster, rules
 from .review import analyze_review
 from .contract import ContractError, ident, obj
 
@@ -18,6 +18,8 @@ class Workbench:
         if 'review' in source:
             review = obj(source['review'], '复核数据')
             outputs.update(analyze_review(review, model, compiled, outputs))
+        if 'roster' in source:
+            outputs.update(roster.analyze_roster(obj(source['roster'], '名册数据'), compiled))
         return artifacts.make_packet(self.config['namespace'], source, outputs)
 
     def execute(self, command, body):

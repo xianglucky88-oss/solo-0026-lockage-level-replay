@@ -25,3 +25,7 @@ python3 -m levelreplay.check_flow export
 ### 扩展复核
 
 使用「复核样例」，随后在「扩展复核」切换各项结果。有效输入见 `examples/review-sample.json` 与 `examples/review-alternate.json`。例如运行 `python3 -m levelreplay.check_flow steps` 可核对派生结果、拒绝非法复核和基础版本兼容性。
+
+### 过闸名册核对
+
+使用「名册样例」，在「过闸名册核对」查看已核实名册、名册争用、确认配对冲突与孤立观察。有效输入见 `examples/roster-sample.json` 与 `examples/roster-alternate.json`，非法输入见 `examples/roster-reject.json`。运行 `python3 -m levelreplay.check_flow roster_verified` 可核对最优解释、争用名额与冲突上报，并确认省略 `roster` 时基础口径不变。该功能只做离线通行取证，不改变闸门高差或供水归属。

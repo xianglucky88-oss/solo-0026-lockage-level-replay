@@ -11,7 +11,7 @@
   <header class="top">
     <div><p class="eyebrow">闸室测记</p><h1>船闸水位回放台</h1></div>
     <div class="toolbar" aria-label="数据操作">
-      <button id="sample">样例</button><button id="alternate">对照样例</button><button id="review-sample">复核样例</button>
+      <button id="sample">样例</button><button id="alternate">对照样例</button><button id="review-sample">复核样例</button><button id="roster-sample">名册样例</button>
       <label class="upload-label">导入数据<input id="upload" type="file" accept=".json,application/json" aria-label="导入数据"></label>
       <button id="evaluate">重新处理</button><button id="seal" class="primary">封存成果</button>
     </div>
@@ -27,6 +27,10 @@
       <details id="review-pane" class="review-pane" hidden>
         <summary>扩展复核</summary>
         <nav id="review-stages" class="stage-list" aria-label="扩展复核阶段"></nav>
+      </details>
+      <details id="roster-pane" class="review-pane" hidden>
+        <summary>过闸名册核对</summary>
+        <nav id="roster-stages" class="stage-list" aria-label="过闸名册核对阶段"></nav>
       </details>
       <section class="result-shell" aria-label="结果明细">
         <div class="results-title"><h2 id="table-title">边界读数</h2><span id="row-count"></span></div>
